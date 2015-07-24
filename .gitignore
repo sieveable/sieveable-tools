@@ -1,0 +1,14 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# log Files
+*.log
+*.log.age
+
+# Intellij IDEA
+.idea/
+*.iml
+
+# Mac
+.DS_Store
