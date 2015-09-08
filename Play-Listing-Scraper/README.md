@@ -1,12 +1,28 @@
 # Listing details parser
 Scrape and extract apps' listing details information from the Google Play Store
 
+## Installation
+
+### Installing from PyPI
+```
+pip install playlistingscraper
+```
+
+### Installing from source
+```
+$ git clone https://github.com/sikuli/sieveable-tools.git
+$ cd Play-Listing-Scraper
+$ sudo python setup.py install
+```
+
 ## Usage
 
 ```
-Usage: python listing-parser.py [options] google_play_html_page_file | packageName-versionCode
+$ playlistingscraper --help
+playlistingscraper [options] packageName-versionCode | google_play_html_page_file
 
-Parse listing details web page and store the data in JSON format
+A tool for Scraping an app's listing details data from the Google Play Store
+store and saving it in a file in JSON format.
 
 Options:
   --version             show program's version number and exit
@@ -16,6 +32,13 @@ Options:
                         current directory
   -l FILE, --log=FILE   write logs to FILE.
   -v, --verbose         Increase verbosity.
+```
+
+## Example
+```
+$ playlistingscraper com.evernote-4535
+$ ls
+com.evernote-4534.listing.json
 ```
 
 ## Disclaimer
