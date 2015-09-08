@@ -2,5 +2,5 @@ language: python
 python:
   - "2.7"
 install:
-  - pip install -r play_listing_scraper/requirements.txt
-script: python play_listing_scraper/tests/*.py
+  - pip install -r Play-Listing-Scraper/requirements.txt
+script: python Play-Listing-Scraper/tests/*.py
