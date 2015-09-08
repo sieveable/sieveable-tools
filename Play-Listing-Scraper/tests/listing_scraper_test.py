@@ -5,14 +5,11 @@ import json
 import os
 from types import *
 from nose.tools import *
-sys.path.append('./src')
-from listing_scraper import ListingScraper
-
+from playlistingscraper.playlistingscraper import PlayListingScraper
 
 class ListingParserTest(unittest.TestCase):
-
     def setUp(self):
-        listing_parser = ListingScraper()
+        listing_parser = PlayListingScraper()
         self.package_name = "com.google.android.youtube"
         self.version_code = "5021"
         out_dir = os.getcwd()
@@ -36,7 +33,7 @@ class ListingParserTest(unittest.TestCase):
 
     def test_title(self):
         self.assertGreater(len(self.app["t"]), 0, "title is empty")
-        #assert type(self.app["t"]) is unicode, "t is not a string: %r" \
+        # assert type(self.app["t"]) is unicode, "t is not a string: %r" \
         #                                         % self.app["t"]
         self.assertTrue("youtube" in self.app["t"].lower(),
                         "Unknown app title")
@@ -58,15 +55,17 @@ class ListingParserTest(unittest.TestCase):
         self.assertGreater(len(self.app["os"]), 0, "os version  is empty")
 
     def test_rating_count(self):
-        assert type(self.app["rct"]) is IntType, "rating count is not an integer: %r" \
-                                                 % self.app["rct"]
+        assert type(
+            self.app["rct"]) is IntType, "rating count is not an integer: %r" \
+                                         % self.app["rct"]
         self.assertGreater(self.app["rct"], 0,
                            "rating count is not greater than zero")
 
     def test_rating(self):
         print(self.app["rate"])
-        assert type(self.app["rate"]) is FloatType, "app rating is not a float number: %r" \
-                                                 % self.app["rate"]
+        assert type(self.app[
+                        "rate"]) is FloatType, "app rating is not a float number: %r" \
+                                               % self.app["rate"]
         self.assertGreater(self.app["rate"], 0,
                            "app rating is not greater than zero")
 
@@ -86,13 +85,15 @@ class ListingParserTest(unittest.TestCase):
         self.assertGreater(len(self.app["sz"]), 0, "install size is empty")
 
     def test_download_count(self):
-        assert type(self.app["dct"]) is IntType, "download count is not an integer: %r" \
-                                                 % self.app["dct"]
+        assert type(
+            self.app["dct"]) is IntType, "download count is not an integer: %r" \
+                                         % self.app["dct"]
         self.assertGreater(self.app["dct"], 0,
                            "download count is not greater than zero")
 
     def test_download_count_text(self):
-        self.assertGreater(len(self.app["dtxt"]), 0, "download count text is empty")
+        self.assertGreater(len(self.app["dtxt"]), 0,
+                           "download count text is empty")
 
     def test_privacy_url(self):
         self.assertGreater(len(self.app["purl"]), 0, "privacy url is empty")
@@ -100,9 +101,6 @@ class ListingParserTest(unittest.TestCase):
 
     def test_whats_new(self):
         self.assertGreater(len(self.app["new"]), 0, "whats new field is empty")
-
-
-
 
 
 if __name__ == '__main__':
