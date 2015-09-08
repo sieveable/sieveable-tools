@@ -31,6 +31,6 @@ setup(
     ],
     entry_points={
         'console_scripts':
-            ['playlistingscraper = playlistingscraper.listing_scraper:playlistingscraper_command']
+            ['playlistingscraper = playlistingscraper.playlistingscraper:playlistingscraper_command']
     }
 )
