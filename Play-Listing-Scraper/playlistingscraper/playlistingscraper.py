@@ -18,8 +18,8 @@ from requests.exceptions import ReadTimeout
 import xpathExpressions
 
 
-class ListingScraper(object):
-    log = logging.getLogger("listing_scraper")
+class PlayListingScraper(object):
+    log = logging.getLogger("play_listing_scraper")
     # The logger's level must be set to the "lowest" level.
     log.setLevel(logging.DEBUG)
     locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' )
@@ -135,11 +135,12 @@ class ListingScraper(object):
         # Add the console logger
         self.log.addHandler(logging_console)
         parser = OptionParser(
-            usage="python %prog [options] google_play_html_page_file " +
-                  "| packageName-versionCode",
+            usage="%prog [options] " +
+                  "packageName-versionCode | google_play_html_page_file",
             version="%prog 0.4",
-            description="Parse listing details web page and store the data " +
-                        "in JSON format")
+            description="A tool for Scraping an app's listing details data " +
+                        "from the Google Play Store store " +
+                        "and saving it in a file in JSON format.")
         parser.add_option("-o", "--out-dir", dest="out_dir",
                           help="write out file to a target directory." +
                           " Default is current directory", metavar="DIR")
@@ -188,5 +189,8 @@ class ListingScraper(object):
         print("======================================================")
 
 
+def playlistingscraper_command():
+    PlayListingScraper().cli(sys.argv[1:])
+
 if __name__ == '__main__':
-    ListingScraper().cli(sys.argv[1:])
+    playlistingscraper_command()
