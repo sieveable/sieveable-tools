@@ -15,6 +15,7 @@ from requests.exceptions import ConnectionError
 from requests.exceptions import HTTPError
 from requests.exceptions import Timeout
 from requests.exceptions import ReadTimeout
+from __init__ import __version__
 
 import xpathExpressions
 
@@ -130,7 +131,7 @@ class PlayListingScraper(object):
         parser = OptionParser(
             usage="%prog [options] " +
                   "packageName-versionCode | google_play_html_page_file",
-            version="%prog 0.4",
+            version="%prog " + __version__,
             description="A tool for Scraping an app's listing details data " +
                         "from the Google Play Store store " +
                         "and saving it in a file in JSON format.")
