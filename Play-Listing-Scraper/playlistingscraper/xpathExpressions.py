@@ -1,6 +1,6 @@
 TITLE = ['//div[@class="document-title"]/div/text()',
          '//h1[@class="document-title"]/div/text()']
-DESCRIPTION = ['//div[@class="id-app-orig-desc"]']
+DESCRIPTION = ['//div[@class="id-app-orig-desc"]//text()']
 CATEGORY = ['//span[@itemprop="genre"]/text()']
 PRICE = ['//span[@class="display-price"][1]/text()']
 DATE_PUBLISHED = ['//div[@itemprop="datePublished"]/text()']
@@ -14,4 +14,4 @@ CREATOR_ADDRESS = ['//div[contains(@class, "content") and contains(@class, "phys
 INSTALL_SIZE = ['//div[@itemprop="fileSize"]/text()']
 DOWNLOAD_COUNT_TEXT = ['//div[@itemprop="numDownloads"]/text()']
 PRIVACY_URL = ['//a[@class="dev-link" and contains(text(),"Privacy")]/@href']
-WHATS_NEW = ['//div[@class="recent-change"]/text()']
+WHATS_NEW = ['//div[@class="recent-change"]//text()']

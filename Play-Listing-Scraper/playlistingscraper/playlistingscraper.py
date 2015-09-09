@@ -1,20 +1,21 @@
 #!/usr/bin/python
 import sys
 import os
-import datetime
 import logging
 from optparse import OptionParser
 from io import StringIO
+import json
+import locale
+
 from lxml import etree
 from lxml.etree import ParserError
 from lxml.etree import XMLSyntaxError
-import json
-import locale
 import requests
 from requests.exceptions import ConnectionError
 from requests.exceptions import HTTPError
 from requests.exceptions import Timeout
 from requests.exceptions import ReadTimeout
+
 import xpathExpressions
 
 
@@ -26,8 +27,7 @@ class PlayListingScraper(object):
 
     def parse_tree(self, tree, package_name, version_code, out_dir):
         title = self.get_property(tree, xpathExpressions.TITLE)
-        description = self.get_property_and_children(tree,
-                                                     xpathExpressions.DESCRIPTION)
+        description = self.get_property(tree, xpathExpressions.DESCRIPTION)
         category = self.get_property(tree, xpathExpressions.CATEGORY)
         price = self.get_property(tree, xpathExpressions.PRICE)
         date_published = self.get_property(tree, xpathExpressions.DATE_PUBLISHED)
@@ -78,31 +78,19 @@ class PlayListingScraper(object):
         val = None
         for exp in xpath_expressions:
             val = tree.xpath(exp)
-            val = ' '.join(val).strip()
             if val:
                 break
-        return val or ''
-
-    @staticmethod
-    def get_property_and_children(tree, xpath_expressions):
-        val = []
-        for exp in xpath_expressions:
-            first_child = tree.xpath(exp)[0].text
-            val.append(first_child)
-            remaining_children = tree.xpath(exp + "//text()")
-            for c in remaining_children:
-                val.append(c)
-            if len(val) > 0:
-                break
-        text = ' '.join(val).strip()
-        return text or ''
+        return ' '.join(val).strip()
 
     def scrape_content(self, html_content, package_name, version_code,
                        out_dir=os.getcwd()):
         try:
             parser = etree.HTMLParser()
             tree = etree.parse(html_content, parser)
-            self.parse_tree(tree, package_name, version_code, out_dir)
+            if tree.getroot() is None:
+                self.log.error("Invalid html content")
+            else:
+                self.parse_tree(tree, package_name, version_code, out_dir)
         except (ParserError, XMLSyntaxError) as e:
             self.log.error("Error in parsing html page for %s message: %s",
                            package_name + "-" + version_code, e)
@@ -112,16 +100,21 @@ class PlayListingScraper(object):
         try:
             play_url = "https://play.google.com/store/apps/details?id=" + \
                        package_name
-            html_content = StringIO(requests.get(play_url).text)
-            self.scrape_content(html_content, package_name, version_code,
-                                out_dir)
+            r = requests.get(play_url)
+            if r.status_code == 200:
+                html_content = StringIO(requests.get(play_url).text)
+                self.scrape_content(html_content, package_name, version_code,
+                                    out_dir)
+            else:
+                self.log.error("Failed to request the html page for %s " +
+                               "http request status code: %i", package_name,
+                               r.status_code)
         except (ConnectionError, HTTPError, Timeout, ReadTimeout) as e:
             self.log.error("Network error while requesting the html page for" +
                            " %s message: %s",
                            package_name + "-" + version_code, e)
 
     def cli(self, argv):
-        start_time = datetime.datetime.now()
         out_dir = os.getcwd()
         logging_file = None
         logging_level = logging.ERROR
@@ -183,10 +176,8 @@ class PlayListingScraper(object):
                                     args[0].split('-')[1], out_dir)
         else:
             self.log.error('Invalid app name or html file path. ' +
-                           'User packageName-versionCode or a valid path name.')
-        print("======================================================")
-        print("Finished after " + str(datetime.datetime.now() - start_time))
-        print("======================================================")
+                           'Arguments must be either packageName-versionCode ' +
+                           'or a valid path name.')
 
 
 def playlistingscraper_command():
