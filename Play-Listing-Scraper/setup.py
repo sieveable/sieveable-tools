@@ -1,5 +1,5 @@
 from os import path
-import playlistingscraper
+from playlistingscraper.version import __version__
 from setuptools import setup, find_packages
 
 
@@ -17,7 +17,7 @@ setup(
     name='playlistingscraper',
     packages=find_packages(exclude=['tests*']),
     install_requires=requires,
-    version=playlistingscraper.__version__,
+    version=__version__,
     description='A command line tool that scrpaes the listing details of an app in the Google Play Store and saves it in a JSON file.',
     long_description=read('README.md'),
     author='Khalid Alharbi',

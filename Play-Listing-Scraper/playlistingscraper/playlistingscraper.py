@@ -15,9 +15,9 @@ from requests.exceptions import ConnectionError
 from requests.exceptions import HTTPError
 from requests.exceptions import Timeout
 from requests.exceptions import ReadTimeout
-from __init__ import __version__
 
 import xpathExpressions
+from version import __version__
 
 
 class PlayListingScraper(object):

@@ -1,1 +1,3 @@
-__version__ = '0.4.3'
+"""
+playlistingscraper - a CLI tool for scraping an app's listing details information from the Google Play Store.
+"""
