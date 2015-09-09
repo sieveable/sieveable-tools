@@ -1,13 +1,13 @@
 #!/usr/bin/env python2
-import sys
-import unittest
 import json
 import os
 from types import *
-from nose.tools import *
+import unittest
+
 from playlistingscraper.playlistingscraper import PlayListingScraper
 
-class ListingParserTest(unittest.TestCase):
+
+class PlayListingScrapwerTest(unittest.TestCase):
     def setUp(self):
         listing_parser = PlayListingScraper()
         self.package_name = "com.google.android.youtube"
