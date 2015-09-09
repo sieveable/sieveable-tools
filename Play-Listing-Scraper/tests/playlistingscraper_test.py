@@ -46,7 +46,8 @@ class PlayListingScrapwerTest(unittest.TestCase):
 
     def test_price(self):
         self.assertGreater(len(self.app["pri"]), 0, "price is empty")
-        self.assertEqual(self.app["pri"], "Free", "app is not Free")
+        self.assertEqual(self.app["pri"], "Free", "Expected Free but got " +
+                         self.app["pri"])
 
     def test_date_published(self):
         self.assertGreater(len(self.app["dtp"]), 0, "date published is empty")
