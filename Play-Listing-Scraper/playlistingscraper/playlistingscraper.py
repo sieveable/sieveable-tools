@@ -24,23 +24,29 @@ class PlayListingScraper(object):
     log = logging.getLogger("play_listing_scraper")
     # The logger's level must be set to the "lowest" level.
     log.setLevel(logging.DEBUG)
-    locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' )
+    locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
     def parse_tree(self, tree, package_name, version_code, out_dir):
         title = self.get_property(tree, xpathExpressions.TITLE)
         description = self.get_property(tree, xpathExpressions.DESCRIPTION)
         category = self.get_property(tree, xpathExpressions.CATEGORY)
         price = self.get_property(tree, xpathExpressions.PRICE)
-        date_published = self.get_property(tree, xpathExpressions.DATE_PUBLISHED)
+        if len(price) > 1:
+            price = price.split(' ')[1]
+        date_published = self.get_property(tree,
+                                           xpathExpressions.DATE_PUBLISHED)
         os_version = self.get_property(tree, xpathExpressions.OPERATING_SYSTEM)
-        rating_count_text = self.get_property(tree, xpathExpressions.RATING_COUNT)
+        rating_count_text = self.get_property(tree,
+                                              xpathExpressions.RATING_COUNT)
         rating_count = locale.atoi(rating_count_text)
         rating_text = self.get_property(tree, xpathExpressions.RATING)
         rating = float(rating_text.split()[1])
-        content_rating = self.get_property(tree, xpathExpressions.CONTENT_RATING)
+        content_rating = self.get_property(tree,
+                                           xpathExpressions.CONTENT_RATING)
         creator = self.get_property(tree, xpathExpressions.CREATOR)
         creator_url = self.get_property(tree, xpathExpressions.CREATOR_URL)
-        creator_address = self.get_property(tree, xpathExpressions.CREATOR_ADDRESS)
+        creator_address = self.get_property(tree,
+                                            xpathExpressions.CREATOR_ADDRESS)
         install_size = self.get_property(tree, xpathExpressions.INSTALL_SIZE)
         download_count_text = self.get_property(tree,
                                                 xpathExpressions.DOWNLOAD_COUNT_TEXT)
@@ -56,17 +62,17 @@ class PlayListingScraper(object):
                           "pri": price,
                           "dtp": date_published,
                           "os": os_version,
-                          "rct" : rating_count,
-                          "rate" : rating,
-                          "crat" : content_rating,
-                          "crt" : creator,
+                          "rct": rating_count,
+                          "rate": rating,
+                          "crat": content_rating,
+                          "crt": creator,
                           "cadd": creator_address,
-                          "curl" : creator_url,
-                          "sz" : install_size,
-                          "dct" : download_count,
-                          "dtxt" : download_count_text,
+                          "curl": creator_url,
+                          "sz": install_size,
+                          "dct": download_count,
+                          "dtxt": download_count_text,
                           "purl": privacy_url,
-                          "new" : whats_new
+                          "new": whats_new
                           }, sort_keys=True, indent=4, separators=(',', ': '))
         out_file = os.path.join(out_dir, package_name + '-' + version_code +
                                 '.listing.json')
@@ -137,7 +143,7 @@ class PlayListingScraper(object):
                         "and saving it in a file in JSON format.")
         parser.add_option("-o", "--out-dir", dest="out_dir",
                           help="write out file to a target directory." +
-                          " Default is current directory", metavar="DIR")
+                               " Default is current directory", metavar="DIR")
         parser.add_option("-l", "--log", dest="log_file",
                           help="write logs to FILE.", metavar="FILE")
         parser.add_option('-v', '--verbose', dest="verbose", default=0,
@@ -183,6 +189,7 @@ class PlayListingScraper(object):
 
 def playlistingscraper_command():
     PlayListingScraper().cli(sys.argv[1:])
+
 
 if __name__ == '__main__':
     playlistingscraper_command()
