@@ -8,16 +8,21 @@ def read(file_path):
         return f.read()
 
 
+requires = [
+    'lxml>=3.4.4',
+    'requests>=2.7.0'
+]
+
 setup(
     name='playlistingscraper',
     packages=find_packages(exclude=['tests*']),
+    install_requires=requires,
     version=playlistingscraper.__version__,
     description='A command line tool that scrpaes the listing details of an app in the Google Play Store and saves it in a JSON file.',
     long_description=read('README.md'),
     author='Khalid Alharbi',
     author_email='kalharbi@users.noreply.github.com',
-    url='https://github.com/sikuli/sieveable-tools',
-    download_url='https://github.com/sikuli/sieveable-tools/releases/tag/0.4',
+    url='https://github.com/sikuli/sieveable-tools/tree/master/Play-Listing-Scraper',
     keywords=['google', 'play', 'scraper', 'listing', 'details', 'apps'],
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -31,6 +36,8 @@ setup(
     ],
     entry_points={
         'console_scripts':
-            ['playlistingscraper = playlistingscraper.playlistingscraper:playlistingscraper_command']
+            [
+                'playlistingscraper = playlistingscraper.playlistingscraper:playlistingscraper_command'
+            ]
     }
 )
