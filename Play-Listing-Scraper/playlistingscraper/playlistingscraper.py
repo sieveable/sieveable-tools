@@ -38,9 +38,14 @@ class PlayListingScraper(object):
         os_version = self.get_property(tree, xpathExpressions.OPERATING_SYSTEM)
         rating_count_text = self.get_property(tree,
                                               xpathExpressions.RATING_COUNT)
-        rating_count = locale.atoi(rating_count_text)
+        rating_count = 0
+        if rating_count_text != '':
+            rating_count = locale.atoi(rating_count_text)
+
         rating_text = self.get_property(tree, xpathExpressions.RATING)
-        rating = float(rating_text.split()[1])
+        rating = 0
+        if rating_text != '':
+            rating = float(rating_text.split()[1])
         content_rating = self.get_property(tree,
                                            xpathExpressions.CONTENT_RATING)
         creator = self.get_property(tree, xpathExpressions.CREATOR)
