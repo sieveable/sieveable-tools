@@ -1,6 +1,9 @@
 # Play Listing Scraper
 Scrape and extract apps' listing details information from the Google Play Store.
 
+[![Build Status](https://travis-ci.org/sikuli/sieveable-tools.svg?branch=master)](http://travis-ci.org/sikuli/sieveable-tools) [![PyPI](https://img.shields.io/pypi/v/playlistingscraper.svg)](https://github.com/sikuli/sieveable-tools/tree/master/Play-Listing-Scraper) [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/sikuli/sieveable-tools)
+
+
 ## Installation
 
 ### Installing from PyPI
