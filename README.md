@@ -13,6 +13,8 @@ A Python script for decoding apk files into their nearly origin files. It runs a
 ### [UI XML](ui-xml)
 A tool for parsing Android XML layout files and storing them in one XML file to simplify UI analysis.
 
+## [Manifest](Manifest)
+A Python script that copies the AndroidManifest.xml file into a specific directory and renaming it as packageName-versionCode.xml
 
 # License
 MIT
