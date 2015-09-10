@@ -71,7 +71,7 @@ $ cat com.evernote-4534.listing.json
 Sieveable uses the output of this tool as the listing details data and stores it in a MongoDB collection. 
 
 MongoDB stores all field names in every document which consumes disk space; therefore, we should use shorter field names. 
-The following table shows the short names used in the public collection in MongoDB and their meanings.
+The following table shows the short field names used in the output JSON file.
 
 |short name |  meaning                  |
 |-----------|---------------------------|
