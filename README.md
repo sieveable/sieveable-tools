@@ -16,5 +16,8 @@ A tool for parsing Android XML layout files and storing them in one XML file to 
 ## [Manifest](Manifest)
 A Python script that copies AndroidManifest.xml files into a specific directory and renames them as packageName-versionCode.xml
 
+## [API calls](API-Calls)
+A python script that extracts API calls used by the app. It searches for invoked methods in the smali files.
+
 # License
 MIT
