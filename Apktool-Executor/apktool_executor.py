@@ -28,7 +28,7 @@ def run_apktool(apk_file, target_dir, framework_dir, tag, no_src, no_res):
     apk_version_info = get_apk_info(apk_file)
     # skip the target directory if it already exists
     if os.path.exists(target_dir):
-        log.warn("Target directory already exists")
+        log.warn("Target directory %s already exists", target_dir)
         return None, None
         
     args = [apktool_path, 'd', apk_file, '-o', target_dir]
@@ -92,20 +92,17 @@ class ApktoolExecutor(object):
         self.no_src = False
         self.no_res = False
             
-    def start_main(self, path_file, target_dir):
+    def start_main(self, apk_paths_list, target_dir):
         apk_paths = []
         # Create pool of worker processes
         pool = Pool(processes=self.processes)
         log.info('A pool of %i worker processes has been created', self.processes)
 
-        # If the apk path file is given
-        with open(path_file, 'r') as f:
-            for line in f:
-                line = line.strip()
-                if os.path.exists(line):
-                    apk_paths.append(line)
-                else:
-                    log.error('No such file: %s', line)
+        for apk_path in apk_paths_list:
+            if os.path.exists(apk_path):
+                apk_paths.append(apk_path)
+            else:
+                log.error('No such file: %s', apk_path)
 
         if len(apk_paths) > 0:
             try:
@@ -178,12 +175,13 @@ class ApktoolExecutor(object):
         log.addHandler(logging_console)
         
         # command line parser
-        parser = OptionParser(usage="python %prog apk_path_file "
-                             "target_directory [options]",
+        parser = OptionParser(usage="python %prog <apk_path_file | " +
+                                    "comma_separated_apk_path_names> " +
+                                    "target_directory [options]",
                               version="%prog " + __version__)
         parser.add_option("-p", "--processes", dest="processes", type="int",
-                           help="the number of worker processes to use. " +
-                           "Default is the number of CPUs in the system.")
+                          help="the number of worker processes to use. " +
+                                "Default is the number of CPUs in the system.")
         parser.add_option("-w", "--framework", help="forces apktool to use "
                           "framework files located in <FRAMEWORK_DIR>."
                           , dest="framework_dir")
@@ -199,7 +197,7 @@ class ApktoolExecutor(object):
                           action='count', help='increase verbosity.')
                           
         (options, args) = parser.parse_args(argv)
-        if len(args) != 2:
+        if len(args) < 2:
             parser.error("incorrect number of arguments.")
         if options.processes:
             self.processes = options.processes
@@ -225,19 +223,31 @@ class ApktoolExecutor(object):
             if logging_file:
                 logging_file.setLevel(logging_level)
 
-        path_file = None
+        apk_paths = None
         target_dir = None
-        if os.path.isfile(args[0]):
-            path_file = os.path.abspath(args[0])
+
+        if len(args) == 2 and os.path.isfile(args[0]) \
+                and os.path.splitext(args[0])[1] != ".apk":
+            with open(os.path.abspath(args[0])) as f:
+                apk_paths = f.read().splitlines()
+        elif len(args) == 2 and os.path.isfile(args[0]) \
+                and os.path.splitext(args[0])[1] == ".apk":
+            apk_paths = [os.path.abspath(args[0])]
+        elif len(args) >= 2 and type(args[0:-1]) is list:
+            apk_paths = args[0:-1]
         else:
-            sys.exit("Error: apk path file " + args[0] + " does not exist.")
+            sys.exit("Error: No APK path is specified " + args[0] +
+                     " . Please specify any of the following: a path to " +
+                     "an APK file, a list of APK path names separated by a " +
+                     "comma , or a text file that contains lines of " +
+                     "APK path names.")
     
-        if os.path.isdir(args[1]):
-            target_dir = os.path.abspath(args[1])
+        if os.path.isdir(args[-1]):
+            target_dir = os.path.abspath(args[-1])
         else:
-            sys.exit("Error: target directory " + args[1] + " does not exist.")
+            sys.exit("Error: target directory " + args[-1] + " does not exist.")
     
-        self.start_main(path_file, target_dir)
+        self.start_main(apk_paths, target_dir)
      
         print("======================================================")
         print("Finished after " + str(datetime.datetime.now() - start_time))
