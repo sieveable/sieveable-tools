@@ -214,7 +214,7 @@ class UIXML(object):
                           help="The name of the directory that the output files get " +
                           "written to. Default is to write files " +
                           "inside the unpacked apk directory under a sub-directory named ui-xml.",
-                          metavar="FILE")
+                          metavar="DIR")
         
         (options, args) = parser.parse_args()
         if len(args) != 1:

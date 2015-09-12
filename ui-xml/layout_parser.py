@@ -81,7 +81,7 @@ class LayoutParser(object):
     def find_attr_value(self, xml_file, element_name, attribute_name):
         try:
             if not os.path.exists(xml_file):
-                self.log.warning('Warning: Resource file %s does not exist, ',
+                self.log.warning('Warning: Resource file %s does not exist.',
                                  xml_file)
                 return []
             tree = etree.parse(xml_file)
