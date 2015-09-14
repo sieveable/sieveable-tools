@@ -134,7 +134,7 @@ class ApktoolExecutor(object):
                 pool.terminate()
                 print('pool has been terminated.')
         else:
-            log.error('Failed to find apk files in %s', path_file)
+            log.error('Failed to find apk files.')
                         
     @staticmethod
     def write_version_to_apktoolyml(apktool_file, version_info):
@@ -225,7 +225,6 @@ class ApktoolExecutor(object):
 
         apk_paths = None
         target_dir = None
-
         if len(args) == 2 and os.path.isfile(args[0]) \
                 and os.path.splitext(args[0])[1] != ".apk":
             with open(os.path.abspath(args[0])) as f:
