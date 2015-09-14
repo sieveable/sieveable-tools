@@ -60,7 +60,9 @@ class APICallsExtractor(object):
         while depth > 1:
             path_separator += path_separator
             depth -= 1
-        return glob.glob(dir_name + path_separator + 'AndroidManifest.xml')
+        path_name = os.path.join(dir_name, path_separator,
+                                 'AndroidManifest.xml')
+        return glob.glob(path_name)
 
     @staticmethod
     def get_app_info_from_manifest(manifest_file):
