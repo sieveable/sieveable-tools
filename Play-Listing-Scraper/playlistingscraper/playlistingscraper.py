@@ -55,7 +55,9 @@ class PlayListingScraper(object):
         install_size = self.get_property(tree, xpathExpressions.INSTALL_SIZE)
         download_count_text = self.get_property(tree,
                                                 xpathExpressions.DOWNLOAD_COUNT_TEXT)
-        download_count = locale.atoi(download_count_text.split("-")[0].strip())
+        download_count = 0
+        if download_count_text != '':
+            download_count = locale.atoi(download_count_text.split("-")[0].strip())
         privacy_url = self.get_property(tree, xpathExpressions.PRIVACY_URL)
         whats_new = self.get_property(tree, xpathExpressions.WHATS_NEW)
 
