@@ -7,13 +7,16 @@ import json
 from optparse import OptionParser
 from lxml import etree
 from xml.etree.ElementTree import QName
+from lxml.etree import ParserError
+from lxml.etree import XMLSyntaxError
 
 log = logging.getLogger("count_descriptive_text")
 log.setLevel(logging.DEBUG)
 namespace = "http://schemas.android.com/apk/res/android"
 
 def count_elements(filename, element_name):
-    tree = etree.parse(filename)
+    parser = etree.XMLParser(recover=True)
+    tree = etree.parse(filename, parser)
     attribute_full_name = str(QName(namespace, 'android:contentDescription'))
     total = tree.xpath('count(//' + element_name + ')')
     with_count = tree.xpath('count(//' + element_name + 
@@ -27,7 +30,7 @@ def count_elements(filename, element_name):
 def count_descriptive_text(element_name, source_dir, target_dir):
     count = 0
     result = []
-    for f in glob.iglob(os.path.join(source_dir, '**/', '*.xml')):
+    for f in glob.iglob(os.path.join(source_dir, '**/', '*.xml'), recursive=True):
         log.info("%i - Checking the number of " + element_name + " in %s",
                 count, os.path.abspath(f))
         count +=1
@@ -39,16 +42,19 @@ def count_descriptive_text(element_name, source_dir, target_dir):
                 "packageName" : package_name, "versionCode": version_code,
                 "total_" + element_name: 0, "count_with_contentDescription": 0,
                 "count_without_contentDescription": 0}
-        total, with_count, without_count = count_elements(f, element_name)
-        d["total_"+element_name] = total
-        d["count_with_contentDescription"] = with_count
-        d["count_without_contentDescription"] = without_count
-        result.append(d)
+        try:
+            total, with_count, without_count = count_elements(f, element_name)
+            d["total_"+element_name] = total
+            d["count_with_contentDescription"] = with_count
+            d["count_without_contentDescription"] = without_count
+            result.append(d)
+        except (ParserError, XMLSyntaxError) as e:
+            log.error("Error in parsing file: %s", f)
+            continue
     out_file = os.path.join(target_dir, element_name + '_descriptive_text_count.json')
     with open(out_file, 'w+') as fw:
-        json.dump(result, fw)
+        json.dump(result, fw, indent=0)
     log.info("Saved the result at %s", out_file)
-
 
 def main(args):
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
